@@ -5,27 +5,24 @@ const int SPRAY = 1;
 const int SHIFTLEFT = 2;
 const int SHIFTRIGHT = 3;
 
+const int STEPSFORSHIFT = 2000;
+
 String inputString = "";
 int InputCommand = 0;
 
-int Position = 0;
-// Record the number of steps we've taken
-int Distance = 0;
-// Servo-Objekt um einen Servomotor zu steuern
 Servo SprayServo;
 
 void setup()
 {
   pinMode(2, OUTPUT);
-
   pinMode(4, OUTPUT);
 
   digitalWrite(2, LOW);
-
   digitalWrite(4, LOW);
+  
   Serial.begin(9600);
+  
   SprayServo.attach(A0); // verknüpft den Servomotor an Pin 0 mit dem Servo-Objekt
-
   SprayServo.write(50); // überträgt die Zielposition an den Servomotors
 }
 
@@ -33,7 +30,6 @@ void loop()
 {
   readInput();
   executeCommand();
-  // movement();
 }
 
 void executeCommand()
@@ -45,6 +41,12 @@ void executeCommand()
       break;
     case SPRAY:
       spray(); 
+      break;
+    case SHIFTLEFT:
+      shiftLeft();
+      break;
+    case SHIFTRIGHT:
+      shiftRight();
       break;
     default: 
       break;
@@ -62,43 +64,34 @@ void spray()
   SprayServo.write(50);
 }
 
-void movement()
+void shiftLeft()
 {
-  
-  if (Position != Distance)
+  if(digitalRead(2) == LOW)
   {
-    Serial.println(Position);
-    Serial.println(Distance);
-    Distance = Distance + 1; // record this step // Check to see if we are at the end of our move
+    digitalWrite(2, HIGH);
+  }
+  
+  for(int i = 0; i < STEPSFORSHIFT; i++)
+  {
     digitalWrite(4, HIGH);
     delayMicroseconds(500);
     digitalWrite(4, LOW);
     delayMicroseconds(500);
   }
-  if (Position - 1 == Distance)
+}
+
+void shiftRight()
+{
+  if(digitalRead(2) == HIGH)
   {
-
-    SprayServo.write(100); // überträgt die Zielposition an den Servomotors
-    delay(500);
-    SprayServo.write(50); // überträgt die Zielposition an den Servomotors
+    digitalWrite(2, LOW);
   }
-
-  // two rotation for 1/8 bridge and 1 rotation for 1/6 bridge (for this code)
-
-  if (Distance == 3200)
-  { // We are! Reverse direction (invert DIR signal)
-
-    //if (digitalRead(2) == LOW) {
-
-    //digitalWrite(2, HIGH); }
-
-    //else {
-
-    //digitalWrite(2, LOW);
-
-    //} // Reset our Distance back to zero since we're // starting a new move
-
-    Distance = 0; // Now pause for half a second delay(500);
+  for(int i = 0; i < STEPSFORSHIFT; i++)
+  {
+    digitalWrite(4, HIGH);
+    delayMicroseconds(500);
+    digitalWrite(4, LOW);
+    delayMicroseconds(500);
   }
 }
 
@@ -120,11 +113,9 @@ void readInput()
       Serial.println(inputString);
       
       InputCommand = (inputString.toInt());
-      Position = InputCommand;
-      
       
       Serial.print("Value: ");
-      Serial.println(Position);
+      Serial.println(InputCommand);
       
       // clear the string for new input:
       inputString = "";
