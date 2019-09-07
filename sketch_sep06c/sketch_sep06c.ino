@@ -1,9 +1,17 @@
 #include <Servo.h>
 
+const int SPRAY = 0;
+
+const int SHIFTLEFT = 1;
+const int SHIFTRIGHT = 2;
+
+String inputString = "";
+
 int Position = 0;
-int Distance = 0; // Record the number of steps we've taken
-String inString = "";
-Servo myservo; // erstellt ein Servo-Objekt um einen Servomotor zu steuern
+// Record the number of steps we've taken
+int Distance = 0;
+// Servo-Objekt um einen Servomotor zu steuern
+Servo SprayServo;
 
 void setup()
 {
@@ -15,14 +23,19 @@ void setup()
 
   digitalWrite(4, LOW);
   Serial.begin(9600);
-  myservo.attach(A0); // verknüpft den Servomotor an Pin 0 mit dem Servo-Objekt
+  SprayServo.attach(A0); // verknüpft den Servomotor an Pin 0 mit dem Servo-Objekt
 
-  myservo.write(50); // überträgt die Zielposition an den Servomotors
+  SprayServo.write(50); // überträgt die Zielposition an den Servomotors
 }
 
 void loop()
 {
   readInput();
+  movement();
+}
+
+void movement()
+{
   
   if (Position != Distance)
   {
@@ -37,9 +50,9 @@ void loop()
   if (Position - 1 == Distance)
   {
 
-    myservo.write(100); // überträgt die Zielposition an den Servomotors
+    SprayServo.write(100); // überträgt die Zielposition an den Servomotors
     delay(500);
-    myservo.write(50); // überträgt die Zielposition an den Servomotors
+    SprayServo.write(50); // überträgt die Zielposition an den Servomotors
   }
 
   // two rotation for 1/8 bridge and 1 rotation for 1/6 bridge (for this code)
@@ -69,22 +82,22 @@ void readInput()
     if (isDigit(inChar))
     {
       // convert the incoming byte to a char and add it to the string:
-      inString += (char)inChar;
+      inputString += (char)inChar;
     }
     
     // if you get a newline, print the string, then the string's value:
     if (inChar == '\n')
     {
       Serial.print("String: ");
-      Serial.println(inString);
+      Serial.println(inputString);
       
-      Position = (inString.toInt());
+      Position = (inputString.toInt());
       
       Serial.print("Value: ");
       Serial.println(Position);
       
       // clear the string for new input:
-      inString = "";
+      inputString = "";
     }
   }
 }
