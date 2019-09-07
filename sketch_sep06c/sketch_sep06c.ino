@@ -29,7 +29,7 @@ void setup()
   Serial.begin(9600);
   
   BanksyServo.attach(A0); // verknüpft den Servomotor an Pin 0 mit dem Servo-Objekt
-  BanksyServo.write(50); // überträgt die Zielposition an den Servomotors
+  BanksyServo.write(0); // überträgt die Zielposition an den Servomotors
 
   BotServo.attach(A1);
   BotServo.write(50);
@@ -72,11 +72,23 @@ void executeCommand()
 
 void spray()
 {
+  int pos = 0;
+  for (pos = 0; pos <= 90; pos += 2) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    BanksyServo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+  for (pos = 90; pos >= 0; pos -= 2) { // goes from 180 degrees to 0 degrees
+    BanksyServo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+  /*
   // überträgt die Zielposition an den Servomotors
   BanksyServo.write(100);
   delay(500);
   // überträgt die Zielposition an den Servomotors
   BanksyServo.write(50);
+  */
 }
 
 void shiftLeft()
