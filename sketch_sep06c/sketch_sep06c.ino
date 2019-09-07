@@ -1,16 +1,22 @@
 #include <Servo.h>
 
+// Nothing
 const int DONOTHING = 0;
+// Banksy
 const int SPRAY = 1;
 const int SHIFTLEFT = 2;
 const int SHIFTRIGHT = 3;
+// Bot
+const int TURNLEFT = 4;
+const int TURNRIGHT = 5;
 
 const int STEPSFORSHIFT = 2000;
 
 String inputString = "";
 int InputCommand = 0;
 
-Servo SprayServo;
+Servo BanksyServo;
+Servo BotServo;
 
 void setup()
 {
@@ -22,8 +28,11 @@ void setup()
   
   Serial.begin(9600);
   
-  SprayServo.attach(A0); // verknüpft den Servomotor an Pin 0 mit dem Servo-Objekt
-  SprayServo.write(50); // überträgt die Zielposition an den Servomotors
+  BanksyServo.attach(A0); // verknüpft den Servomotor an Pin 0 mit dem Servo-Objekt
+  BanksyServo.write(50); // überträgt die Zielposition an den Servomotors
+
+  BotServo.attach(A1);
+  BotServo.write(50);
 }
 
 void loop()
@@ -48,6 +57,12 @@ void executeCommand()
     case SHIFTRIGHT:
       shiftRight();
       break;
+    case TURNLEFT:
+      turn();
+      break;
+    case TURNRIGHT:
+      turn();
+      break;
     default: 
       break;
   }
@@ -58,10 +73,10 @@ void executeCommand()
 void spray()
 {
   // überträgt die Zielposition an den Servomotors
-  SprayServo.write(100);
+  BanksyServo.write(100);
   delay(500);
   // überträgt die Zielposition an den Servomotors
-  SprayServo.write(50);
+  BanksyServo.write(50);
 }
 
 void shiftLeft()
@@ -93,6 +108,15 @@ void shiftRight()
     digitalWrite(4, LOW);
     delayMicroseconds(500);
   }
+}
+
+void turn()
+{
+  // überträgt die Zielposition an den Servomotors
+  BotServo.write(100);
+  delay(500);
+  // überträgt die Zielposition an den Servomotors
+  BotServo.write(50);
 }
 
 void readInput()
