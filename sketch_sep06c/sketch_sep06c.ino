@@ -1,11 +1,12 @@
 #include <Servo.h>
 
-const int SPRAY = 0;
-
-const int SHIFTLEFT = 1;
-const int SHIFTRIGHT = 2;
+const int DONOTHING = 0;
+const int SPRAY = 1;
+const int SHIFTLEFT = 2;
+const int SHIFTRIGHT = 3;
 
 String inputString = "";
+int InputCommand = 0;
 
 int Position = 0;
 // Record the number of steps we've taken
@@ -31,7 +32,20 @@ void setup()
 void loop()
 {
   readInput();
-  movement();
+  executeCommand();
+  // movement();
+}
+
+void executeCommand()
+{
+  switch(InputCommand)
+  {
+    case DONOTHING:
+      // Serial.println("Did nothing");
+    default: break;
+  }
+
+  InputCommand = DONOTHING;
 }
 
 void movement()
@@ -91,7 +105,9 @@ void readInput()
       Serial.print("String: ");
       Serial.println(inputString);
       
-      Position = (inputString.toInt());
+      InputCommand = (inputString.toInt());
+      Position = InputCommand;
+      
       
       Serial.print("Value: ");
       Serial.println(Position);
