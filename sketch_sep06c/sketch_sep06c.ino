@@ -22,30 +22,8 @@ void setup()
 
 void loop()
 {
-
-  while (Serial.available() > 0)
-  {
-    Serial.print("L");
-    int inChar = Serial.read();
-    if (isDigit(inChar))
-    {
-      // convert the incoming byte to a char and add it to the string:
-      inString += (char)inChar;
-    }
-    // if you get a newline, print the string, then the string's value:
-    if (inChar == '\n')
-    {
-      Serial.print("Value:");
-      Serial.println(inString.toInt());
-      Serial.print("String: ");
-      Serial.println(inString);
-      // clear the string for new input:
-
-      Position = (inString.toInt());
-
-      inString = "";
-    }
-  }
+  readInput();
+  
   if (Position != Distance)
   {
     Serial.println(Position);
@@ -77,8 +55,36 @@ void loop()
 
     //digitalWrite(2, LOW);
 
-    //} // Reset our distance back to zero since we're // starting a new move
+    //} // Reset our Distance back to zero since we're // starting a new move
 
     Distance = 0; // Now pause for half a second delay(500);
+  }
+}
+
+void readInput()
+{
+  while (Serial.available() > 0)
+  {
+    int inChar = Serial.read();
+    if (isDigit(inChar))
+    {
+      // convert the incoming byte to a char and add it to the string:
+      inString += (char)inChar;
+    }
+    
+    // if you get a newline, print the string, then the string's value:
+    if (inChar == '\n')
+    {
+      Serial.print("String: ");
+      Serial.println(inString);
+      
+      Position = (inString.toInt());
+      
+      Serial.print("Value: ");
+      Serial.println(Position);
+      
+      // clear the string for new input:
+      inString = "";
+    }
   }
 }
