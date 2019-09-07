@@ -42,10 +42,24 @@ void executeCommand()
   {
     case DONOTHING:
       // Serial.println("Did nothing");
-    default: break;
+      break;
+    case SPRAY:
+      spray(); 
+      break;
+    default: 
+      break;
   }
 
   InputCommand = DONOTHING;
+}
+
+void spray()
+{
+  // überträgt die Zielposition an den Servomotors
+  SprayServo.write(100);
+  delay(500);
+  // überträgt die Zielposition an den Servomotors
+  SprayServo.write(50);
 }
 
 void movement()
