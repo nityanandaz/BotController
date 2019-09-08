@@ -89,15 +89,11 @@ void spray()
 
 void lightOn()
 {
-  // Mock
   digitalWrite(10, HIGH);
-  writeEasyNeoPixel(0, HIGH);
-  writeEasyNeoPixel(13, 255, 255, 0);
 }
 
 void lightOff()
 {
-  writeEasyNeoPixel(0, LOW);
   digitalWrite(10, LOW);
 }
 
@@ -130,9 +126,6 @@ void readInput()
     // if you get a newline, print the string, then the string's value:
     if (inChar == '\n')
     {
-      Serial.print("String: ");
-      Serial.println(inputString);
-
       InputCommand = (inputString.toInt());
 
       Serial.print("Value: ");
@@ -153,7 +146,7 @@ void executeCommand()
     case ROTATECLOCKWISE: rotateClockwise(); break;
     case ROTATEANTICLOCKWISE: rotateAnticlockwise(); break; // prefer
     
-    case 4: lightOn(); delay(1000); lightOff(); break;
+    case 4: lightOn(); delay(5000); lightOff(); break;
 
     default: 
       if (InputCommand < 200 && InputCommand > 100)
