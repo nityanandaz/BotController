@@ -43,7 +43,7 @@ void setup()
 {
   // Spray Can
   SprayCanServo.attach(6);
-  SprayCanServo.write(60);
+  SprayCanServo.write(0);
   
   // USB
   Serial.begin(9600);
@@ -71,16 +71,20 @@ void spray()
   // Actual
   int pos = 0;
   
-  for (pos = 60; pos >= 0; pos -= 2) { // goes from 180 degrees to 0 degrees
-    SprayCanServo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
   for (pos = 0; pos <= 60; pos += 2) { // goes from 0 degrees to 180 degrees
     // in steps of 1 degree
     SprayCanServo.write(pos);              // tell servo to go to position in variable 'pos'
     delay(15);                       // waits 15ms for the servo to reach the position
-
   }
+  // delay(5000);
+  for (pos = 60; pos >= 0; pos -= 2) { // goes from 180 degrees to 0 degrees
+    SprayCanServo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+
+  digitalWrite(5, HIGH);
+  delay(1000);
+  digitalWrite(5, LOW);
 }
 
 void lightOn()
