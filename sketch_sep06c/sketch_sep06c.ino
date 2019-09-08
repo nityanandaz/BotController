@@ -152,8 +152,18 @@ void executeCommand()
     case SPRAY: spray(); break;
     case ROTATECLOCKWISE: rotateClockwise(); break;
     case ROTATEANTICLOCKWISE: rotateAnticlockwise(); break; // prefer
+    
     case 4: lightOn(); delay(1000); lightOff(); break;
-    default: break;
+
+    default: 
+      if (InputCommand < 200 && InputCommand > 100)
+      {
+        int steps = InputCommand % 100;
+        
+        AlphaWheelStepper.move_degree(-14.4 * steps);
+        delay(1000);
+      }
+      break;
   }
 
   InputCommand = DONOTHING;
